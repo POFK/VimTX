@@ -160,6 +160,11 @@ nnoremap <c-h> <c-w>h
 nnoremap <c-l> <c-w>l
 nnoremap <c-w> <c-w>w
 
+" buffet switch
+nnoremap <S-p> :bp<cr>
+nnoremap <S-n> :bn<cr>
+" nnoremap <S-d> :bd<cr>
+
 " 打开文件自动定位到最后编辑的位置
 autocmd BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | execute "normal! g'\"" | endif
 
@@ -241,7 +246,7 @@ let g:UltiSnipsJumpForwardTrigger = "<tab>"
 let g:UltiSnipsJumpBackwardTrigger = "<s-tab>"
 
 " ctags
-set tags+=/local/ctags
+set tags+=/local/bin/ctags
 set tags+=~/.vim/systags
 set tags+=~/.vim/x86_64-linux-gnu-systags
 let g:ycm_collect_identifiers_from_tags_files = 1
