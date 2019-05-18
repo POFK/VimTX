@@ -33,6 +33,7 @@ set shiftwidth=4         " 设置格式化时制表符占用空格数
 set softtabstop=4        " 设置4个空格为制表符
 set smarttab             " 在行和段开始处使用制表符
 set nowrap               " 禁止折行
+"set tw=80
 set backspace=2          " 使用回车键正常处理indent,eol,start等
 set sidescroll=10        " 设置向右滚动字符数
 set nofoldenable         " 禁用折叠代码
@@ -89,6 +90,9 @@ Plug 'Chiel92/vim-autoformat'
 " markdown
 Plug 'iamcco/mathjax-support-for-mkdp'
 Plug 'iamcco/markdown-preview.vim'
+
+" latex
+Plug 'lervag/vimtex'
 
 " tags & locating
 Plug 'majutsushi/tagbar'
@@ -221,9 +225,14 @@ let g:ycm_warning_symbol = '>>'
 let g:ycm_seed_identifiers_with_syntax = 1
 let g:ycm_complete_in_comments = 1
 let g:ycm_complete_in_strings = 1
-let g:ycm_server_python_interpreter = ''
+"let g:ycm_server_python_interpreter = ''
+let g:ycm_python_interpreter_path = '/usr/bin/python'
 let g:ycm_python_sys_path = []
-let g:ycm_global_ycm_extra_conf = '~/.ycm_extra_conf.py'
+let g:ycm_extra_conf_vim_data = [
+  \  'g:ycm_python_interpreter_path',
+  \  'g:ycm_python_sys_path'
+  \]
+let g:ycm_global_ycm_extra_conf = '$HOME/.ycm_extra_conf.py'
 
 nnoremap <leader>u :YcmCompleter GoToDeclaration<cr>
 nnoremap <leader>i :YcmCompleter GoToDefinition<cr>
@@ -246,7 +255,8 @@ let g:UltiSnipsJumpForwardTrigger = "<tab>"
 let g:UltiSnipsJumpBackwardTrigger = "<s-tab>"
 
 " ctags
-set tags+=/local/bin/ctags
+"set tags+=/local/bin/ctags
+set tags+=/usr/bin/ctags
 set tags+=~/.vim/systags
 set tags+=~/.vim/x86_64-linux-gnu-systags
 let g:ycm_collect_identifiers_from_tags_files = 1
@@ -286,6 +296,13 @@ nmap <silent> <F10> <Plug>MarkdownPreview
 imap <silent> <F10> <Plug>MarkdownPreview
 nmap <silent> <F11> <Plug>StopMarkdownPreview
 imap <silent> <F11> <Plug>StopMarkdownPreview
+
+" latex
+let g:tex_flavor='latex'
+let g:vimtex_view_method='zathura'
+let g:vimtex_quickfix_mode=0
+set conceallevel=1
+let g:tex_conceal='abdmg'
 
 " vim-easymotion
 let g:EasyMotion_smartcase = 1
