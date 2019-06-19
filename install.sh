@@ -49,7 +49,7 @@ function install_prepare_software()
 {
     compile_ncurses
     pip install  yapf --user
-#   npm install -g remark-cli
+    #   npm install -g remark-cli
 }
 
 function compile_vim_on_linux()
@@ -68,11 +68,11 @@ function compile_vim_on_linux()
         --enable-gui=gtk2 \
         --enable-cscope \
         --prefix=$HOME/local
-    make
-    make install
-    cd -
-    rm -rf ~/vim
-}
+            make
+            make install
+            cd -
+            rm -rf ~/vim
+        }
 
 # 拷贝文件
 function copy_files()
@@ -119,12 +119,19 @@ function print_logo()
 }
 
 
+function settingforUltisnips()
+{
+    ln -s ${PWD}/my-snippets ~/.vim/plugged/my-snippets
+}
+
+
 function begin_install_VimTX()
 {
     copy_files
     install_fonts_on_linux
     install_vim_plugin
     compile_ycm_on_linux
+    settingforUltisnips
     print_logo
 }
 
@@ -136,8 +143,8 @@ function install_on_linux()
     install_prepare_software
     compile_vim_on_linux
     begin_install_VimTX
-
 }
+
 
 function main()
 {

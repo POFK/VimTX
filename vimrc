@@ -124,6 +124,9 @@ Plug 'ryanoasis/vim-devicons'
 " Plug 'altercation/vim-colors-solarized'
 Plug 'tomasr/molokai'
 
+" remote
+Plug 'zenbro/mirror.vim'
+
 " other
 " Plug 'jiangmiao/auto-pairs'
 Plug 'tpope/vim-surround'
@@ -207,6 +210,12 @@ let g:NERDTreeDirArrowExpandable='▷'
 let g:NERDTreeDirArrowCollapsible='▼'
 
 """""""""""""""""
+" mirror.vim    "
+"""""""""""""""""
+nnoremap <leader><leader>m :MirrorPull<cr>
+
+
+"""""""""""""""""
 " autoformat    "
 """""""""""""""""
 let g:formatterpath = ['$HOME/.local']
@@ -253,6 +262,10 @@ let g:SuperTabDefaultCompletionType = '<C-n>'
 let g:UltiSnipsExpandTrigger = "<tab>"
 let g:UltiSnipsJumpForwardTrigger = "<tab>"
 let g:UltiSnipsJumpBackwardTrigger = "<s-tab>"
+
+" Ultisnips
+set runtimepath+=~/.vim/plugged/my-snippets
+let g:UltiSnipsSnippetsDir = "~/.vim/plugged/my-snippets/UltiSnips"
 
 " ctags
 "set tags+=/local/bin/ctags
