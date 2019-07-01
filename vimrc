@@ -234,7 +234,6 @@ let g:ycm_warning_symbol = '>>'
 let g:ycm_seed_identifiers_with_syntax = 1
 let g:ycm_complete_in_comments = 1
 let g:ycm_complete_in_strings = 1
-"let g:ycm_server_python_interpreter = ''
 let g:ycm_python_interpreter_path = '$CONDA_PREFIX/bin/python'
 let g:ycm_python_sys_path = []
 let g:ycm_extra_conf_vim_data = [
