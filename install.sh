@@ -2,8 +2,8 @@
 # no "sudo" version
 
 echo "#add by VimTX" >> ~/.bashrc
-echo "export PATH='$HOME/local/bin:$PATH'" >> ~/.bashrc
-echo "export LD_LIBRARY_PATH='$HOME/local/lib:$LD_LIBRARY_PATH'" >> ~/.bashrc
+echo "export PATH=\$HOME/local/bin:\$PATH" >> ~/.bashrc
+echo "export LD_LIBRARY_PATH=\$HOME/local/lib:\$LD_LIBRARY_PATH" >> ~/.bashrc
 source ~/.bashrc
 
 if which axel >/dev/null; then
@@ -49,7 +49,7 @@ function install_prepare_software()
 {
     compile_ncurses
     pip install  yapf --user
-#   npm install -g remark-cli
+    #   npm install -g remark-cli
 }
 
 function compile_vim_on_linux()
@@ -61,18 +61,18 @@ function compile_vim_on_linux()
     LDFLAGS=-L$HOME/local/lib ./configure --with-features=huge \
         --enable-multibyte \
         --enable-rubyinterp \
-        --enable-pythoninterp \
-        --with-python-config-dir=$CONDA_PREFIX/lib/python2.7/config \
+        --enable-python3interp \
+        --with-python3-config-dir=$CONDA_PREFIX/lib/python3.7/config-3.7m-x86_64-linux-gnu \
         --enable-perlinterp \
         --enable-luainterp \
         --enable-gui=gtk2 \
         --enable-cscope \
         --prefix=$HOME/local
-    make
-    make install
-    cd -
-    rm -rf ~/vim
-}
+            make
+            make install
+            cd -
+            rm -rf ~/vim
+        }
 
 # 拷贝文件
 function copy_files()
@@ -105,7 +105,7 @@ function install_vim_plugin()
 function compile_ycm_on_linux()
 {
     cd ~/.vim/plugged/YouCompleteMe
-    ./install.py --clang-completer
+    python ./install.py --clang-completer
 }
 
 function print_logo()
@@ -119,12 +119,19 @@ function print_logo()
 }
 
 
+function settingforUltisnips()
+{
+    ln -s ${PWD}/my-snippets ~/.vim/plugged
+}
+
+
 function begin_install_VimTX()
 {
     copy_files
     install_fonts_on_linux
     install_vim_plugin
     compile_ycm_on_linux
+    settingforUltisnips
     print_logo
 }
 
@@ -136,8 +143,8 @@ function install_on_linux()
     install_prepare_software
     compile_vim_on_linux
     begin_install_VimTX
-
 }
+
 
 function main()
 {

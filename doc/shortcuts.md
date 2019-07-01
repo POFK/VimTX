@@ -1,74 +1,4 @@
-VimTX
-=====
-
-Forked from [vimplus](https://github.com/chxuan/vimplus) and customized
-according to my habits. This configuration doesn't need `sudo`
-authority.
-
-install
--------
-
-    bash install
-
-Tips
-----
-
-### code autocomplete
-
--   YouCompleteMe
--   For those code needs special C lib, run `:YcmGenerateConfig` to
-    create `/.ycm_extra_conf.py` in the root directory of this project.
-    In this case, you need the Makefile to identify C flags. (has mapped
-    to F8).
--   You can type `F4` to see to see if any errors or warnings were
-    detected in your file, and `,ff` try to fix it.
--   `,o` go to include
--   If there are some ploblems about the fonts, see
-    [here](https://bbs.archlinux.org/viewtopic.php?pid=1801925#p1801925).
-
-### To Do
-
--   \[x\] customize it
--   \[x\] check the script from vimplus, remove apt-get install...
--   \[x\] the usage tips for this vim configuration
--   \[x\] add header for my code file
-
-Plugin
-------
-
-### [YouCompleteMe](https://github.com/Valloric/YouCompleteMe)
-
-#### General Semantic Completion
-
-You can use Ctrl+Space to trigger the completion suggestions anywhere,
-even without a string prefix. This is useful to see which top-level
-functions are available for use.
-
-#### C-family Semantic Completion
-
-1.  `F8`: For those code needs special C lib, run `:YcmGenerateConfig`
-    (has mapped to `F8`) to create `.ycm_extra_conf.py` in the root
-    directory of this project. In this case, you need a Makefile to
-    identify C flags. Please restart vim after running `F8`.
-2.  You can type `F4` to see to see if any errors or warnings were
-    detected in your file, and `,ff` try to fix it.
-3.  Notely, for python, you should
-
-TO DO
------
-
-### plugin
-
-#### YCM
-
--   @2019-05-18
-    -   \[ \] write a note for the usage of YCM and shortcuts
-    -   \[ \] python, how to configure the env to debug and find error
-    -   \[ \] I have modified the vimrc and .ycm\_extra\_conf but
-        without checking, check it later
-
-插件相关
---------
+## 插件相关
 
     | 快捷键       | 说明                                 |
     | ------------ | ------------------------------       |
@@ -118,7 +48,8 @@ TO DO
     | `fa`         | 查找字母a，然后再按f键查找下一个     |
     | `<c-x><c-o>` | Emoji:dog:补全                       |
 
-\#\#LeaderF Once LeaderF is launched:
+\##LeaderF
+Once LeaderF is launched:
 
     | Command                    | Description                                                              |
     | -------------------------- | ------------------------------------------------------------------------ |
@@ -148,10 +79,9 @@ TO DO
     | `<Right>`                  | move the cursor one character to the right in the prompt                 |
     | `<C-P>`                    | preview the result                                                       |
 
-------------------------------------------------------------------------
+* * *
 
-插入模式
---------
+## 插入模式
 
     | 快捷键  | 说明                           |
     | ------- | ---------------                |
@@ -164,8 +94,7 @@ TO DO
     | `gi`    | 进入到上一次插入模式的位置     |
     | `<esc>` | 退出插入模式                   |
 
-缓存操作
---------
+## 缓存操作
 
     | 快捷键          | 说明               |
     | --------------- | ------------       |
@@ -174,8 +103,7 @@ TO DO
     | `:bn`           | 切换到下一个buffer |
     | `:bd`           | 删除当前buffer     |
 
-窗口操作
---------
+## 窗口操作
 
     | 快捷键            | 说明                   |
     | ----------------- | -----------            |
@@ -189,8 +117,7 @@ TO DO
     | `<c-w>o`          | 关闭其他窗口           |
     | `:only`           | 关闭其他窗口           |
 
-光标移动
---------
+## 光标移动
 
     | 快捷键  | 说明                                     |
     | ------- | ---------------------                    |
@@ -229,8 +156,7 @@ TO DO
     | `[[`    | 跳转到函数开头                           |
     | `]]`    | 跳转到函数结尾                           |
 
-文本编辑
---------
+## 文本编辑
 
     | 快捷键         | 说明                                                     |
     | -------------- | -------------------------------------                    |
@@ -333,8 +259,7 @@ TO DO
     | `:[range]d`    | 删除范围，比如 :20,30d 是删除20到30行，:10d 是删除第十行 |
     | `ddp`          | 交换两行内容：先删除当前行复制到寄存器，并粘贴           |
 
-文件操作
---------
+## 文件操作
 
     | 快捷键               | 说明                                   |
     | -------------------- | -------------------                    |
@@ -355,8 +280,7 @@ TO DO
     | `:vnew`              | 在左右切分的新窗口中编辑新文件         |
     | `:tabnew`            | 在新的标签页中编辑新文件               |
 
-使用外部程序
-------------
+## 使用外部程序
 
     | 快捷键           | 说明                            |
     | ---------------- | -------------------             |
@@ -365,8 +289,7 @@ TO DO
     | `!!`             | 对当前行执行过滤命令            |
     | `!!date<Enter>`  | 用"date"的输出代替当前行        |
 
-宏录制
-------
+## 宏录制
 
     | 快捷键      | 说明                        |
     | ----------- | --------------              |
@@ -376,8 +299,7 @@ TO DO
     | `100@a`     | 播放名字为a的宏100次        |
     | `:normal@a` | 播放名字为a的宏直到自动结束 |
 
-实用命令
---------
+## 实用命令
 
     | 快捷键               | 说明                                              |
     | -------------------- | --------------------------------                  |
@@ -404,8 +326,7 @@ TO DO
     | `:%s/^.\{10\}//`     | 删除每行前10个字符                                |
     | `:%s/.\{10\}$//`     | 删除每行尾10个字符                                |
 
-帮助
-----
+## 帮助
 
     | 快捷键                 | 说明                         |
     | ---------------------- | ----------------             |
@@ -423,8 +344,7 @@ TO DO
     | `h autocommand-events` | 所有可能事件                 |
     | `h write-plugin`       | 编写插件                     |
 
-其他
-----
+## 其他
 
     | 快捷键                | 说明                              |
     | --------------------- | ------------------                |

@@ -33,6 +33,7 @@ set shiftwidth=4         " 设置格式化时制表符占用空格数
 set softtabstop=4        " 设置4个空格为制表符
 set smarttab             " 在行和段开始处使用制表符
 set nowrap               " 禁止折行
+"set tw=80
 set backspace=2          " 使用回车键正常处理indent,eol,start等
 set sidescroll=10        " 设置向右滚动字符数
 set nofoldenable         " 禁用折叠代码
@@ -90,6 +91,9 @@ Plug 'Chiel92/vim-autoformat'
 Plug 'iamcco/mathjax-support-for-mkdp'
 Plug 'iamcco/markdown-preview.vim'
 
+" latex
+Plug 'lervag/vimtex'
+
 " tags & locating
 Plug 'majutsushi/tagbar'
 Plug 'mileszs/ack.vim'
@@ -120,8 +124,11 @@ Plug 'ryanoasis/vim-devicons'
 " Plug 'altercation/vim-colors-solarized'
 Plug 'tomasr/molokai'
 
+" remote
+Plug 'zenbro/mirror.vim'
+
 " other
-" Plug 'jiangmiao/auto-pairs'
+Plug 'jiangmiao/auto-pairs'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-endwise'
@@ -203,6 +210,12 @@ let g:NERDTreeDirArrowExpandable='▷'
 let g:NERDTreeDirArrowCollapsible='▼'
 
 """""""""""""""""
+" mirror.vim    "
+"""""""""""""""""
+nnoremap <leader><leader>m :MirrorPull<cr>
+
+
+"""""""""""""""""
 " autoformat    "
 """""""""""""""""
 let g:formatterpath = ['$HOME/.local']
@@ -221,9 +234,13 @@ let g:ycm_warning_symbol = '>>'
 let g:ycm_seed_identifiers_with_syntax = 1
 let g:ycm_complete_in_comments = 1
 let g:ycm_complete_in_strings = 1
-let g:ycm_server_python_interpreter = ''
+let g:ycm_python_interpreter_path = '$CONDA_PREFIX/bin/python'
 let g:ycm_python_sys_path = []
-let g:ycm_global_ycm_extra_conf = '~/.ycm_extra_conf.py'
+let g:ycm_extra_conf_vim_data = [
+  \  'g:ycm_python_interpreter_path',
+  \  'g:ycm_python_sys_path'
+  \]
+let g:ycm_global_ycm_extra_conf = '$HOME/.ycm_extra_conf.py'
 
 nnoremap <leader>u :YcmCompleter GoToDeclaration<cr>
 nnoremap <leader>i :YcmCompleter GoToDefinition<cr>
@@ -245,8 +262,13 @@ let g:UltiSnipsExpandTrigger = "<tab>"
 let g:UltiSnipsJumpForwardTrigger = "<tab>"
 let g:UltiSnipsJumpBackwardTrigger = "<s-tab>"
 
+" Ultisnips
+set runtimepath+=~/.vim/plugged/my-snippets
+let g:UltiSnipsSnippetsDir = "~/.vim/plugged/my-snippets/UltiSnips"
+
 " ctags
-set tags+=/local/bin/ctags
+"set tags+=/local/bin/ctags
+set tags+=/usr/bin/ctags
 set tags+=~/.vim/systags
 set tags+=~/.vim/x86_64-linux-gnu-systags
 let g:ycm_collect_identifiers_from_tags_files = 1
@@ -286,6 +308,13 @@ nmap <silent> <F10> <Plug>MarkdownPreview
 imap <silent> <F10> <Plug>MarkdownPreview
 nmap <silent> <F11> <Plug>StopMarkdownPreview
 imap <silent> <F11> <Plug>StopMarkdownPreview
+
+" latex
+let g:tex_flavor='latex'
+let g:vimtex_view_method='zathura'
+let g:vimtex_quickfix_mode=0
+set conceallevel=1
+let g:tex_conceal='abdmg'
 
 " vim-easymotion
 let g:EasyMotion_smartcase = 1
