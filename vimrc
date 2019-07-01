@@ -128,7 +128,7 @@ Plug 'tomasr/molokai'
 Plug 'zenbro/mirror.vim'
 
 " other
-" Plug 'jiangmiao/auto-pairs'
+Plug 'jiangmiao/auto-pairs'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-endwise'
@@ -235,7 +235,7 @@ let g:ycm_seed_identifiers_with_syntax = 1
 let g:ycm_complete_in_comments = 1
 let g:ycm_complete_in_strings = 1
 "let g:ycm_server_python_interpreter = ''
-let g:ycm_python_interpreter_path = '/usr/bin/python'
+let g:ycm_python_interpreter_path = '$CONDA_PREFIX/bin/python'
 let g:ycm_python_sys_path = []
 let g:ycm_extra_conf_vim_data = [
   \  'g:ycm_python_interpreter_path',

@@ -62,7 +62,9 @@ function compile_vim_on_linux()
         --enable-multibyte \
         --enable-rubyinterp \
         --enable-pythoninterp \
-        --with-python-config-dir=$CONDA_PREFIX/lib/python2.7/config \
+        --enable-python3interp \
+        --with-python-config-dir=/usr/lib/python2.7/config-x86_64-linux-gnu \
+        --with-python3-config-dir=/usr/lib/python3.6/config-3.6m-x86_64-linux-gnu \
         --enable-perlinterp \
         --enable-luainterp \
         --enable-gui=gtk2 \
@@ -121,7 +123,7 @@ function print_logo()
 
 function settingforUltisnips()
 {
-    ln -s ${PWD}/my-snippets ~/.vim/plugged/my-snippets
+    ln -s ${PWD}/my-snippets ~/.vim/plugged
 }
 
 
