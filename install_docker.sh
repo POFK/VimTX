@@ -83,6 +83,7 @@ function compile_ycm_on_linux()
     cd ~/.vim/plugged/YouCompleteMe
     git submodule update --init --recursive
     python ./install.py --clang-completer
+    cd -
 }
 
 function print_logo()
