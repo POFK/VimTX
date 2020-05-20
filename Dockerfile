@@ -21,8 +21,7 @@ RUN wget -q \
     && chgrp -R workflow /opt/miniconda \
     && chmod 770 -R /opt/miniconda
 
-
-RUN git clone https://github.com/POFK/VimTX.git
+ADD . /source/VimTX
 
 WORKDIR /source/VimTX/
 
@@ -30,8 +29,7 @@ USER workflow
 
 RUN /opt/miniconda/bin/conda init
 
-RUN cd /source/VimTX && \ 
-    ./install_docker.sh
+RUN ./install_docker.sh
 
 WORKDIR /home/workspace/
 
