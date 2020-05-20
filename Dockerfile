@@ -13,7 +13,7 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/* && \
     apt-get clean
 
-RUN wget \
+RUN wget -q \
     https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh \
     && mkdir /root/.conda \
     && bash Miniconda3-latest-Linux-x86_64.sh -b -p /opt/miniconda \
@@ -30,7 +30,8 @@ USER workflow
 
 RUN /opt/miniconda/bin/conda init
 
-RUN ./install_docker.sh
+RUN cd /source/VimTX && \ 
+    ./install_docker.sh
 
 WORKDIR /home/workspace/
 
