@@ -10,6 +10,18 @@ install
 
     bash install
 
+Docker
+-------
+    docker pull txmao/vimtx
+    docker build .  -t vimtx
+    docker run -it -d --net=host --ipc=host --name vimtx txmao/vimtx:latest
+    docker run -it -d -v /var/run/docker.sock:/var/run/docker.sock -v /tmp/.X11-unix:/tmp/.X11-unix -e DISPLAY=$DISPLAY --net=host --ipc=host -v $HOME/workspace:/home/workspace --name vimtx txmao:vimtx:latest
+    docker exec  -it vimtx bash
+
+    docker stop vimtx
+    docker container rm  vimtx
+
+
 Tips
 ----
 
