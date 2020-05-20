@@ -25,11 +25,19 @@ ADD . /source/VimTX
 
 WORKDIR /source/VimTX/
 
+RUN mkdir /opt/vimtx \
+    && chgrp workflow /opt/vimtx \
+    && chown workflow /opt/vimtx
+
 USER workflow
 
 RUN /opt/miniconda/bin/conda init
 
-RUN ./install_docker.sh
+RUN TAR=/opt/vimtx \
+    && echo "#add by VimTX" >> ~/.bashrc \
+    && echo "export PATH=$TAR/local/bin:\$PATH" >> ~/.bashrc \
+    && echo "export LD_LIBRARY_PATH=$TAR/local/lib:$CONDA_PREFIX/lib:\$LD_LIBRARY_PATH" >> ~/.bashrc \
+    && ./install_docker.sh
 
 WORKDIR /home/workspace/
 

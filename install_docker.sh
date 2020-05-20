@@ -2,11 +2,6 @@
 
 TAR=/opt/vimtx
 
-echo "#add by VimTX" >> ~/.bashrc
-echo "export PATH=$TAR/local/bin:\$PATH" >> ~/.bashrc
-echo "export LD_LIBRARY_PATH=$TAR/local/lib:$CONDA_PREFIX/lib:\$LD_LIBRARY_PATH" >> ~/.bashrc
-source ~/.bashrc
-
 if which axel >/dev/null; then
     Downloader=`which axel`" -n 4"
     DownloadOPT="-o"
