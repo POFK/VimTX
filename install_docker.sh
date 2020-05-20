@@ -2,10 +2,10 @@
 
 TAR=/opt/vimtx
 
-#echo "#add by VimTX" >> ~/.bashrc
-#echo "export PATH=$TAR/local/bin:\$PATH" >> ~/.bashrc
-#echo "export LD_LIBRARY_PATH=$TAR/local/lib:$CONDA_PREFIX/lib:\$LD_LIBRARY_PATH" >> ~/.bashrc
-#source ~/.bashrc
+echo "#add by VimTX" >> ~/.bashrc
+echo "export PATH=$TAR/local/bin:\$PATH" >> ~/.bashrc
+echo "export LD_LIBRARY_PATH=$TAR/local/lib:$CONDA_PREFIX/lib:\$LD_LIBRARY_PATH" >> ~/.bashrc
+source ~/.bashrc
 
 if which axel >/dev/null; then
     Downloader=`which axel`" -n 4"
@@ -49,37 +49,12 @@ function compile_ncurses()
 function install_prepare_software()
 {
     compile_ncurses
-    #pip install  yapf --user
 }
-
-#function compile_vim_on_linux()
-#{
-#    ${Downloader} ftp://ftp.vim.org/pub/vim/unix/vim-8.2.tar.bz2 ${DownloadOPT} /tmp/
-#    tar -C /tmp -jxf /tmp/vim-8.2.tar.bz2
-#    cd /tmp/vim82
-#    make uninstall && make clean && make distclean
-#    LDFLAGS=-L$TAR/local/lib ./configure --with-features=huge \
-#        --enable-multibyte \
-#        --enable-rubyinterp \
-#        --enable-python3interp \
-#        --with-python3-config-dir=$CONDA_PREFIX/lib \
-#        --enable-perlinterp \
-#        --enable-luainterp \
-#        --enable-gui=gtk2 \
-#        --enable-cscope \
-#        --prefix=$TAR/local
-#            make -j4
-#            make install
-#            cd -
-#        }
 
 function compile_vim_on_linux()
 {
     echo 'pass'
-    #apt-get update -y && apt-get install -y vim
         }
-
-
 
 # 拷贝文件
 function copy_files()
@@ -128,7 +103,7 @@ function print_logo()
 
 function settingforUltisnips()
 {
-    ln -s ${PWD}/my-snippets ~/.vim/plugged
+    cp -r ${PWD}/my-snippets ~/.vim/plugged/
 }
 
 
@@ -138,14 +113,15 @@ function begin_install_VimTX()
     install_fonts_on_linux
     install_vim_plugin
     compile_ycm_on_linux
-    settingforUltisnips
     print_logo
 }
 
 function after_install_VimTX()
 {
-    echo 's'
+    echo 'setting... '
     rm -rf /tmp/*
+    echo "colorscheme molokai" >> ${HOME}/.vimrc
+    settingforUltisnips
 }
 
 
