@@ -4,6 +4,9 @@ RUN useradd -m workflow && echo "workflow:workflow" | chpasswd && adduser workfl
 
 WORKDIR /source/
 
+RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && \
+        echo "Asia/Shanghai" > /etc/timezone
+
 RUN apt-get update && \
     apt-get upgrade -y && \
     apt-get install -y axel wget git make cmake gcc g++ curl fontconfig vim  cmake time sudo && \
