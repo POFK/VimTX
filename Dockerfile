@@ -74,8 +74,7 @@ RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
 
 RUN apt-get update && \
     apt-get upgrade -y && \
-    #apt-get install -y axel wget git make cmake gcc g++ curl fontconfig vim time sudo gosu && \
-    apt-get install -y axel wget git curl fontconfig vim time sudo gosu && \
+    apt-get install -y axel wget git make cmake gcc g++ curl fontconfig vim time sudo gosu && \
     rm -rf /var/lib/apt/lists/* && \
     apt-get clean
 
