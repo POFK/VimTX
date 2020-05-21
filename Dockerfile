@@ -100,10 +100,12 @@ RUN TAR=/opt/vimtx \
     && /opt/miniconda/bin/conda init \ 
     && echo "export PATH=$TAR/local/bin:\$PATH" >> ~/.bashrc \ 
     && echo "export LD_LIBRARY_PATH=$TAR/local/lib:$CONDA_PREFIX/lib:\$LD_LIBRARY_PATH" >> ~/.bashrc \
-    && ln -s ${TAR}/vimrc.test ~/.vimrc \
+    && ln -s ${TAR}/vimrc ~/.vimrc \
     && ln -s ${TAR}/ycm_extra_conf.py ~/.ycm_extra_conf.py \
     && ln -s ${TAR}/vim ~/.vim \
-    && ln -s ${TAR}/fonts ~/.fonts 
+    && ln -s ${TAR}/fonts ~/.fonts \
+    && fc-cache -vf ~/.fonts
+
 
 USER root
 WORKDIR /home/workspace/
