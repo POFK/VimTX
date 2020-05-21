@@ -1,6 +1,6 @@
 #!/bin/bash
 
-TAR=/opt/vimtx
+TAR=$1
 
 if which axel >/dev/null; then
     Downloader=`which axel`" -n 4"
@@ -46,35 +46,20 @@ function install_prepare_software()
     compile_ncurses
 }
 
-function compile_vim_on_linux()
-{
-    echo 'pass'
-        }
-
-# 拷贝文件
 function copy_files()
 {
-    rm -rf ~/.vimrc
-    ln -s ${PWD}/vimrc ~/.vimrc
-
-    rm -rf ~/.vimrc.local
-    cp ${PWD}/vimrc.local ~/.vimrc.local
-
-    rm -rf ~/.ycm_extra_conf.py
-    ln -s ${PWD}/ycm_extra_conf.py ~/.ycm_extra_conf.py
-}
-
-function install_fonts_on_linux()
-{
-    mkdir ~/.fonts
-    rm -rf ~/.fonts/Droid\ Sans\ Mono\ Nerd\ Font\ Complete.otf
-    cp ./fonts/Droid\ Sans\ Mono\ Nerd\ Font\ Complete.otf ~/.fonts
-    fc-cache -vf ~/.fonts
+    ln -s ${TAR}/vimrc ~/.vimrc
+    ln -s ${TAR}/ycm_extra_conf.py ~/.ycm_extra_conf.py
+    ln -s ${TAR}/vim ~/.vim
+    ln -s ${TAR}/fonts ~/.fonts
+    cp -r ${TAR}/my-snippets ~/.vim/plugged/
 }
 
 function install_vim_plugin()
 {
+    perl -p -i -e 's/colorscheme\ molokai/\"colorscheme\ molokai/g' ~/.vimrc
     vim -c PlugInstall -c q -c q
+    perl -p -i -e 's/\"colorscheme\ molokai/colorscheme\ molokai/g' ~/.vimrc
 }
 
 # linux编译ycm插件
@@ -97,16 +82,9 @@ function print_logo()
 }
 
 
-function settingforUltisnips()
-{
-    cp -r ${PWD}/my-snippets ~/.vim/plugged/
-}
-
-
 function begin_install_VimTX()
 {
     copy_files
-    install_fonts_on_linux
     install_vim_plugin
     compile_ycm_on_linux
     print_logo
@@ -117,7 +95,6 @@ function after_install_VimTX()
     echo 'setting... '
     rm -rf /tmp/*
     echo "colorscheme molokai" >> ${HOME}/.vimrc
-    settingforUltisnips
 }
 
 
@@ -128,7 +105,6 @@ function install_on_linux()
     type=`get_linux_platform_type`
     echo "linux platform type: "${type}
     install_prepare_software
-    compile_vim_on_linux
     begin_install_VimTX
     after_install_VimTX
 }
