@@ -179,7 +179,7 @@ autocmd BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | execute "
 " colorscheme solarized
 " let g:solarized_tercolors=256
 " set background=dark
-"colorscheme molokai
+colorscheme molokai
 let g:rehash256 = 1
 
 
