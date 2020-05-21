@@ -20,8 +20,9 @@ if [ "$MAP_NODE_UID" != "no" ]; then
 
     echo "**** Fix Permission... "
     chgrp -R dev /opt/ && chmod 770 -R /opt
+    chown -R dev /home/dev && chgrp -R dev /home/dev 
     echo "**** Fix Permission finished... "
-
+    exec gosu dev "cd ~/.vim/plugged/YouCompleteMe && python install.py"
 fi
 
 echo "**** GOSU dev $@ ..."

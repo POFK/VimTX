@@ -85,12 +85,11 @@ COPY --from=builder /opt /opt
 
 # Add local user 'dev'
 RUN groupadd -r dev --gid=9001 && \ 
-    useradd -s /bin/bash -r -g dev -d /home/dev --uid=9001 dev
+    useradd -m -s /bin/bash -r -g dev --uid=9001 dev
 
 # Grant him sudo privileges
 RUN echo "dev ALL=(root) NOPASSWD:ALL" > /etc/sudoers.d/dev && \
     chmod 0440 /etc/sudoers.d/dev
-RUN mkdir /home/dev && chown dev /home/dev && chgrp dev /home/dev
     
 USER dev
 ENV HOME /home/dev
