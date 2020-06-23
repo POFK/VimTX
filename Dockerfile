@@ -8,7 +8,7 @@ ENV HOME /home/dev
 ADD . /opt/vimtx
 WORKDIR $HOME
 
-RUN echo "http://mirrors.aliyun.com/alpine/edge/testing" >> /etc/apk/repositories
+RUN echo "http://dl-cdn.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories
 
 #RUN echo "140.82.113.4 gist.github.com" >> /etc/hosts \
 #    && echo "140.82.112.4 github.com" >> /etc/hosts \
@@ -18,7 +18,7 @@ RUN echo "http://mirrors.aliyun.com/alpine/edge/testing" >> /etc/apk/repositorie
 #    && mkdir -p $HOME/.vim/autoload && cp /opt/vimtx/plug.vim $HOME/.vim/autoload/ \
 #    && sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories
 
-RUN apk --no-cache add axel wget git make gcc g++ curl fontconfig vim cmake time sudo bash ncurses perl &&\
+RUN apk --no-cache add axel wget git make gcc g++ curl fontconfig vim cmake time sudo bash ncurses perl gosu &&\
     pip install pep8 yapf
 
       
