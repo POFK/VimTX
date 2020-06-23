@@ -18,11 +18,14 @@ RUN echo "http://dl-cdn.alpinelinux.org/alpine/edge/testing" >> /etc/apk/reposit
 #    && mkdir -p $HOME/.vim/autoload && cp /opt/vimtx/plug.vim $HOME/.vim/autoload/ \
 #    && sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories
 
-RUN apk --no-cache add axel wget git make gcc g++ curl fontconfig vim cmake time sudo bash ncurses perl gosu &&\
+RUN apk --no-cache add &&\
+        axel wget git make gcc g++ curl fontconfig &&\
+        vim cmake time sudo bash ncurses perl gosu &&\
+        shadow bash-completion &&\
     pip install pep8 yapf
 
       
-RUN addgroup -S -g 1000 dev && adduser -S dev -u 1000 -G dev
+RUN addgroup -S -g 1000 dev && adduser --shell /bin/bash -S dev -u 1000 -G dev
 
 # Grant him sudo privileges
 RUN echo "dev ALL=(root) NOPASSWD:ALL" > /etc/sudoers.d/dev && \
@@ -43,7 +46,8 @@ RUN TAR=/opt/vimtx \
     && git submodule update --init --recursive \
     && python ./install.py --clang-completer \
     && chown -R dev $HOME \
-    && chgrp -R dev $HOME
+    && chgrp -R dev $HOME \
+    && chown -R dev /opt/ && chgrp -R dev /opt/ 
 
 WORKDIR /home/workspace/
 COPY entrypoint.sh /entrypoint.sh

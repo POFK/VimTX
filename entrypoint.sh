@@ -9,8 +9,10 @@ if [ "$MAP_NODE_UID" != "no" ]; then
 
     uid=$(stat -c '%u' "$MAP_NODE_UID")
     gid=$(stat -c '%g' "$MAP_NODE_UID")
+    ouid=$(stat -c '%u' "/opt")
+    ogid=$(stat -c '%g' "/opt")
 
-    if [ $uid = 1000 -a $gid = 1000 ]; then
+    if [ $uid = $ouid -a $gid = $ogid ]; then
         echo "Good permission!"
     else
         echo "dev ---> UID = $uid / GID = $gid"
@@ -19,10 +21,9 @@ if [ "$MAP_NODE_UID" != "no" ]; then
           groupmod -g $gid dev 2> /dev/null || usermod -a -G $gid dev
         }
         echo "**** Fix Permission... "
-        chgrp -R dev /opt/ && chmod 770 -R /opt
+        chown -R dev /opt/ && chgrp -R dev /opt/
         chown -R dev /home/dev && chgrp -R dev /home/dev 
         echo "**** Fix Permission finished... "
-        gosu dev bash -l -c "cd ~/.vim/plugged/YouCompleteMe && /opt/miniconda/bin/python install.py"
     fi
 fi
 
