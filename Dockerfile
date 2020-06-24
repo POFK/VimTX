@@ -53,8 +53,9 @@ RUN echo "dev ALL=(root) NOPASSWD:ALL" > /etc/sudoers.d/dev && \
  
 WORKDIR $HOME
 
-RUN ln -s ${TAR}/vimrc $HOME/.vimrc \
-    && pip install pep8 yapf flake8 \
+RUN /opt/miniconda/bin/conda init \
+    && /opt/miniconda/bin/pip install pep8 yapf flake8 \
+    && ln -s ${TAR}/vimrc $HOME/.vimrc \
     && ln -s ${TAR}/vimrc.local $HOME/.vimrc.local \
     && ln -s ${TAR}/ycm_extra_conf.py $HOME/.ycm_extra_conf.py \
     && ln -s ${TAR}/vim $HOME/.vim \
