@@ -1,69 +1,99 @@
-#docker run -it -d --restart=always -v /var/run/docker.sock:/var/run/docker.sock -v /tmp/.X11-unix:/tmp/.X11-unix -e DISPLAY=$DISPLAY --net=host --ipc=host -v $HOME/workspace:/home/workspace --name vimtx txmao/vimtx:latest
-#FROM alpine:3.12
-#FROM python:3.7-alpine
-FROM frolvlad/alpine-glibc
+###########
+# BUILDER #
+###########
 
-LABEL maintainer "TX Mao<mtianxiang@gmail.com>"
+FROM ubuntu:focal as builder
 
-ENV HOME /home/dev
+WORKDIR /source/
+
+RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
+    && echo "Asia/Shanghai" > /etc/timezone
+
+sed -i 's/archive.ubuntu.com/mirrors.aliyun.com/g' /etc/apt/sources.list
+
+RUN apt-get update && \
+    apt-get upgrade -y && \
+    apt-get install -y axel wget git make gcc g++ curl fontconfig vim  cmake time && \
+    rm -rf /var/lib/apt/lists/* && \
+    apt-get clean
+
+# install python env
+
+RUN wget -q \
+    https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh \
+    && mkdir /root/.conda \
+    && bash Miniconda3-latest-Linux-x86_64.sh -b -p /opt/miniconda
+
+# install VimTX
 ADD . /opt/vimtx
-WORKDIR $HOME
+WORKDIR /opt/vimtx/
+RUN /opt/miniconda/bin/conda init
+RUN TAR=/opt/vimtx \
+    && echo "export PATH=$TAR/local/bin:\$PATH" >> ~/.bashrc \
+    && echo "export LD_LIBRARY_PATH=$TAR/local/lib:$CONDA_PREFIX/lib:\$LD_LIBRARY_PATH" >> ~/.bashrc \ 
+    && ./install_docker.sh $TAR
 
-RUN echo "http://dl-cdn.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories
+#########
+# FINAL #
+#########
 
-#RUN echo "140.82.113.4 gist.github.com" >> /etc/hosts \
-#    && echo "140.82.112.4 github.com" >> /etc/hosts \
-#    && echo "151.101.0.133	gist.githubusercontent.com              " >> /etc/hosts \
-#    && echo "199.232.36.133 raw.githubusercontent.com               " >> /etc/hosts \
-#    && echo "151.101.0.133	repository-images.githubusercontent.com " >> /etc/hosts \
-#    && mkdir -p $HOME/.vim/autoload && cp /opt/vimtx/plug.vim $HOME/.vim/autoload/ \
-#    && sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories
+FROM ubuntu:focal
 
-RUN apk --no-cache add \
-        axel \
-        wget \
-        git \
-        make \
-        gcc \
-        g++ \
-        curl \
-        fontconfig \
-        vim \
-        cmake \
-        time \
-        sudo \
-        bash \
-        ncurses \
-        perl \
-        gosu \
-        shadow \
-        python \
-        python-dev \
-    && pip install pep8 yapf flake8
+RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
+    && echo "Asia/Shanghai" > /etc/timezone
 
-      
-RUN addgroup -S -g 1000 dev && adduser --shell /bin/bash -S dev -u 1000 -G dev
+#RUN echo "deb http://mirrors.aliyun.com/ubuntu/ focal main restricted universe multiverse" > /etc/apt/sources.list \
+#    && echo "deb-src http://mirrors.aliyun.com/ubuntu/ focal main restricted universe multiverse" >> /etc/apt/sources.list \
+#    && echo "deb http://mirrors.aliyun.com/ubuntu/ focal-security main restricted universe multiverse" >> /etc/apt/sources.list \
+#    && echo "deb-src http://mirrors.aliyun.com/ubuntu/ focal-security main restricted universe multiverse" >> /etc/apt/sources.list \
+#    && echo "deb http://mirrors.aliyun.com/ubuntu/ focal-updates main restricted universe multiverse" >> /etc/apt/sources.list \
+#    && echo "deb-src http://mirrors.aliyun.com/ubuntu/ focal-updates main restricted universe multiverse" >> /etc/apt/sources.list \
+#    && echo "deb http://mirrors.aliyun.com/ubuntu/ focal-proposed main restricted universe multiverse" >> /etc/apt/sources.list \
+#    && echo "deb-src http://mirrors.aliyun.com/ubuntu/ focal-proposed main restricted universe multiverse" >> /etc/apt/sources.list \
+#    && echo "deb http://mirrors.aliyun.com/ubuntu/ focal-backports main restricted universe multiverse" >> /etc/apt/sources.list \
+#    && echo "deb-src http://mirrors.aliyun.com/ubuntu/ focal-backports main restricted universe multiverse" >> /etc/apt/sources.list \
+#    && echo "192.30.255.112	gist.github.com" >> /etc/hosts \
+#    && echo "192.30.255.112	github.com" >> /etc/hosts \
+#    && echo "151.101.56.133	gist.githubusercontent.com              " >> /etc/hosts \
+#    && echo "199.232.4.133 raw.githubusercontent.com               " >> /etc/hosts \
+#    && echo "151.101.56.133	repository-images.githubusercontent.com " >> /etc/hosts
+
+RUN apt-get update && \
+    apt-get upgrade -y && \
+    apt-get install -y axel wget git make cmake gcc g++ curl fontconfig vim time sudo gosu && \
+    rm -rf /var/lib/apt/lists/* && \
+    apt-get clean
+
+RUN echo "Set disable_coredump false" >> /etc/sudo.conf
+
+
+COPY --from=builder /opt /opt
+
+# Add local user 'dev'
+RUN groupadd -r dev --gid=9001 && \ 
+    useradd -m -s /bin/bash -r -g dev --uid=9001 dev
 
 # Grant him sudo privileges
 RUN echo "dev ALL=(root) NOPASSWD:ALL" > /etc/sudoers.d/dev && \
     chmod 0440 /etc/sudoers.d/dev
     
+USER dev
+ENV HOME /home/dev
+WORKDIR $HOME
 RUN TAR=/opt/vimtx \
-    && fc-cache -vf $HOME/.fonts \
-    && ln -s ${TAR}/vimrc $HOME/.vimrc \
-    && ln -s ${TAR}/vimrc.local $HOME/.vimrc.local \
-    && ln -s ${TAR}/ycm_extra_conf.py $HOME/.ycm_extra_conf.py \
-    && ln -s ${TAR}/vim $HOME/.vim \
-    && ln -s ${TAR}/fonts $HOME/.fonts \
-    && cp -r ${TAR}/my-snippets $HOME/.vim/plugged/ \
-    && perl -p -i -e 's/colorscheme\ molokai/\"colorscheme\ molokai/g' $HOME/.vimrc \
-    && vim -c PlugInstall -c q -c q \
-    && perl -p -i -e 's/\"colorscheme\ molokai/colorscheme\ molokai/g' $HOME/.vimrc \
-    && chown -R dev $HOME \
-    && chgrp -R dev $HOME \
-    && chown -R dev /opt/ && chgrp -R dev /opt/ 
+    && /opt/miniconda/bin/conda init \ 
+    && echo "export PATH=$TAR/local/bin:\$PATH" >> ~/.bashrc \ 
+    && echo "export LD_LIBRARY_PATH=$TAR/local/lib:$CONDA_PREFIX/lib:\$LD_LIBRARY_PATH" >> ~/.bashrc \
+    && ln -s ${TAR}/vimrc ~/.vimrc \
+    && ln -s ${TAR}/ycm_extra_conf.py ~/.ycm_extra_conf.py \
+    && ln -s ${TAR}/vim ~/.vim \
+    && ln -s ${TAR}/fonts ~/.fonts \
+    && fc-cache -vf ~/.fonts
 
+
+USER root
 WORKDIR /home/workspace/
+
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 ENTRYPOINT ["/bin/bash","/entrypoint.sh"]

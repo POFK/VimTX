@@ -27,6 +27,8 @@ if [ "$MAP_NODE_UID" != "no" ]; then
     fi
 fi
 
+gosu dev bash -l -c "cd /home/dev/.vim/plugged/YouCompleteMe && git submodule update --init --recursive && python ./install.py --clang-completer"
+
 echo "**** GOSU dev $@ ..."
 
 exec gosu dev "$@"
