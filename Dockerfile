@@ -26,6 +26,9 @@ RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
         ctags \
         sudo \
         gosu \
+        tmux \
+        texlive \
+        zathura \
     && rm -rf /var/lib/apt/lists/* \
     && apt-get clean \
 # install conda
