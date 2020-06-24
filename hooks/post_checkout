@@ -1,0 +1,8 @@
+#!/bin/bash
+for ARCH in arm32v7 arm64v8
+do 
+    sed 's/FROM ubuntu/FROM '"$ARCH"'\/ubuntu/g' ${DOCKERFILE_PATH} > ${DOCKERFILE_PATH}.${ARCH}
+    echo "########################################"
+    echo "${DOCKERFILE_PATH}.${ARCH}: "
+    cat ${DOCKERFILE_PATH}.${ARCH}
+done

@@ -1,0 +1,14 @@
+#!/bin/bash
+if [ $DOCKER_TAG == "latest" ]
+then
+    echo -e "building image for multiple arch..."
+    for ARCH in arm32v7 arm64v8
+    do
+        echo "building ${DOCKERFILE_PATH}.${ARCH}"
+        docker build -f ${DOCKERFILE_PATH}.${ARCH} -t $IMAGE_NAME-${ARCH} .
+        docker tag $IMAGE_NAME-${ARCH} ${repoName}:${tag}
+        docker push $IMAGE_NAME-${ARCH}
+    done
+    docker build -f ${DOCKERFILE_PATH} -t $IMAGE_NAME .
+fi
+
