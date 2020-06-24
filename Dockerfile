@@ -67,7 +67,7 @@ RUN /opt/miniconda/bin/conda init \
     && perl -p -i -e 's/\"colorscheme\ molokai/colorscheme\ molokai/g' $HOME/.vimrc \
     && cd /home/dev/.vim/plugged/YouCompleteMe \
     && git submodule update --init --recursive \
-    && python ./install.py --clang-completer \
+    && /opt/miniconda/bin/python ./install.py --clang-completer \
     && chown -R dev $HOME \
     && chgrp -R dev $HOME \
     && chown -R dev /opt/ && chgrp -R dev /opt/
