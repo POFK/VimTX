@@ -3,13 +3,6 @@ FROM ubuntu:focal
 ADD . /opt/vimtx
 ADD entrypoint.sh /entrypoint.sh
 
-ENV TAR="/opt/vimtx" \
-        UNAME="dev" \
-        SHELL="/bin/bash" \
-        HOME="/home/dev" \
-        PATH=$TAR/local/bin:$PATH \
-        LD_LIBRARY_PATH=$TAR/local/lib:$CONDA_PREFIX/lib:$LD_LIBRARY_PATH
-
 RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
     && echo "Asia/Shanghai" > /etc/timezone \
 # change apt source
@@ -42,10 +35,16 @@ RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
     && /opt/miniconda/bin/conda init \
     && rm -rf /tmp/*
 
+ENV TAR="/opt/vimtx" \
+        UNAME="dev" \
+        SHELL="/bin/bash" \
+        HOME="/home/dev" \
+        PATH=$TAR/local/bin:$PATH \
+        LD_LIBRARY_PATH=$TAR/local/lib:$CONDA_PREFIX/lib:$LD_LIBRARY_PATH
 
 # Add local user 'dev'
-RUN groupadd -r dev --gid=1001 && \ 
-    useradd -m -s /bin/bash -r -g dev --uid=1001 dev
+RUN groupadd -r $UNAME --gid=1000 && \ 
+    useradd -m -s /bin/bash -r -g $UNAME --uid=1000 $UNAME
 
 # Grant him sudo privileges
 RUN echo "dev ALL=(root) NOPASSWD:ALL" > /etc/sudoers.d/dev && \
