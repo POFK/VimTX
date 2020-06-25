@@ -38,7 +38,7 @@ RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
         sudo \
         gosu \
         tmux \
-        texlive \
+#       texlive \
         zathura \
         python3 \
         python3-dev \
