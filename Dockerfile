@@ -6,7 +6,7 @@ ADD entrypoint.sh /entrypoint.sh
 RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
     && echo "Asia/Shanghai" > /etc/timezone \
 # change apt source
-    && sed -i 's/archive.ubuntu.com/mirrors.aliyun.com/g' /etc/apt/sources.list \
+#   && sed -i 's/archive.ubuntu.com/mirrors.aliyun.com/g' /etc/apt/sources.list \
     && apt-get update \
 # install dependencies
     && apt-get install -y \
@@ -29,13 +29,11 @@ RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
         tmux \
         texlive \
         zathura \
+        python3 \
+        python3-dev \
+        python3-pip \
     && rm -rf /var/lib/apt/lists/* \
     && apt-get clean \
-# install conda
-    && axel -n 4 -q -o /tmp/Miniconda3-latest-Linux-x86_64.sh \
-        https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh \
-    && bash /tmp/Miniconda3-latest-Linux-x86_64.sh -b -p /opt/miniconda \
-    && /opt/miniconda/bin/conda init \
     && rm -rf /tmp/*
 
 ENV TAR="/opt/vimtx" \
@@ -55,8 +53,7 @@ RUN echo "dev ALL=(root) NOPASSWD:ALL" > /etc/sudoers.d/dev && \
  
 WORKDIR $HOME
 
-RUN /opt/miniconda/bin/conda init \
-    && /opt/miniconda/bin/pip install pep8 yapf flake8 \
+RUN pip3 install pep8 yapf flake8 \
     && ln -s ${TAR}/vimrc $HOME/.vimrc \
     && ln -s ${TAR}/vimrc.local $HOME/.vimrc.local \
     && ln -s ${TAR}/ycm_extra_conf.py $HOME/.ycm_extra_conf.py \
@@ -69,7 +66,7 @@ RUN /opt/miniconda/bin/conda init \
     && perl -p -i -e 's/\"colorscheme\ molokai/colorscheme\ molokai/g' $HOME/.vimrc \
     && cd /home/dev/.vim/plugged/YouCompleteMe \
     && git submodule update --init --recursive \
-    && /opt/miniconda/bin/python ./install.py --clang-completer \
+    && python3 ./install.py --clang-completer \
     && chown -R dev $HOME \
     && chgrp -R dev $HOME \
     && chown -R dev /opt/ && chgrp -R dev /opt/
