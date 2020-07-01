@@ -1,47 +1,53 @@
-FROM ubuntu:focal
+#docker build --network=host --build-arg GFW=true -t ycmd --target builder .
+FROM continuumio/miniconda3:4.8.2 as builder
+
+ARG GFW=false
 
 ADD . /opt/vimtx
-ADD entrypoint.sh /entrypoint.sh
+ENV TAR="/opt/vimtx"
 
-RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
-    && echo "Asia/Shanghai" > /etc/timezone \
-# change apt source
-#   && sed -i 's/archive.ubuntu.com/mirrors.aliyun.com/g' /etc/apt/sources.list \
-    && apt-get update \
-# install dependencies
-    && apt-get install -y \
-        axel \
-        wget \
-        git \
-        make \
-        gcc \
-        g++ \
-        curl \
-        fontconfig \
-        cmake \
-        time \
-        vim \
-        libncurses5-dev \
-        libncursesw5-dev \
-        ctags \
-        sudo \
-        gosu \
-        tmux \
-#       texlive \
-        zathura \
-        python3 \
-        python3-dev \
-        python3-pip \
-    && rm -rf /var/lib/apt/lists/* \
-    && apt-get clean \
-    && rm -rf /tmp/*
+RUN if [ "$GFW" = false  ] ; then echo "No GFW!"; \
+        else sed -i 's/deb.debian.org/mirrors.aliyun.com/g' /etc/apt/sources.list \
+        && mkdir $HOME/.pip \
+        && echo "[global] \nindex-url = https://pypi.tuna.tsinghua.edu.cn/simple" >> $HOME/.pip/pip.conf; fi
+
+RUN apt-get update && \
+    apt-get install -y \
+      curl \
+      git \
+      cmake \
+      golang \
+      libclang-dev \
+      nodejs \
+      node-typescript \
+      npm \
+      vim-nox
+
+RUN ln -s ${TAR}/vim $HOME/.vim \
+    && perl -p -i -e 's/colorscheme\ molokai/\"colorscheme\ molokai/g' $TAR/vimrc \
+    && vim -u $TAR/vimrc -c PlugInstall -c q -c q \
+    && cd $HOME/.vim/plugged/YouCompleteMe \
+    && git submodule update --init --recursive \
+    && python ./install.py \
+            --clangd-completer \
+            --go-completer \
+            --ts-completer
+
+
+FROM ubuntu:focal
+
+COPY --from=builder /opt/conda  /opt/conda
+COPY --from=builder /opt/vimtx  /opt/vimtx
 
 ENV TAR="/opt/vimtx" \
         UNAME="dev" \
         SHELL="/bin/bash" \
-        HOME="/home/dev" \
-        PATH=$TAR/local/bin:$PATH \
-        LD_LIBRARY_PATH=$TAR/local/lib:$CONDA_PREFIX/lib:$LD_LIBRARY_PATH
+        HOME="/home/dev"
+
+RUN if [ "$GFW" = false  ] ; then echo "No GFW!"; \
+        else sed -i 's/archive.ubuntu.com/mirrors.aliyun.com/g' /etc/apt/sources.list \
+        && mkdir $HOME/.pip \
+        && echo "[global] \nindex-url = https://pypi.tuna.tsinghua.edu.cn/simple" >> $HOME/.pip/pip.conf; fi
 
 # Add local user 'dev'
 RUN groupadd -r $UNAME --gid=1000 && \ 
@@ -53,7 +59,29 @@ RUN echo "dev ALL=(root) NOPASSWD:ALL" > /etc/sudoers.d/dev && \
  
 WORKDIR $HOME
 
-RUN pip3 install pep8 yapf flake8 \
+RUN ln -s /opt/conda/etc/profile.d/conda.sh /etc/profile.d/conda.sh \
+    && echo ". /opt/conda/etc/profile.d/conda.sh" >> ~/.bashrc \
+    && echo "conda activate base" >> ~/.bashrc
+
+
+RUN apt-get update && \
+    apt-get install -y \
+      curl \
+      git \
+      ctags \
+      libncurses5-dev \
+      libncursesw5-dev \
+      time \
+      cmake \
+      golang \
+      libclang-dev \
+      nodejs \
+      node-typescript \
+      fontconfig \
+      npm \
+      vim \
+    && apt-get clean \
+    && conda install pep8 yapf flake8 \
     && ln -s ${TAR}/vimrc $HOME/.vimrc \
     && ln -s ${TAR}/vimrc.local $HOME/.vimrc.local \
     && ln -s ${TAR}/ycm_extra_conf.py $HOME/.ycm_extra_conf.py \
@@ -61,17 +89,14 @@ RUN pip3 install pep8 yapf flake8 \
     && ln -s ${TAR}/fonts $HOME/.fonts \
     && fc-cache -vf $HOME/.fonts \
     && cp -r ${TAR}/my-snippets $HOME/.vim/plugged/ \
-    && perl -p -i -e 's/colorscheme\ molokai/\"colorscheme\ molokai/g' $HOME/.vimrc \
-    && vim -c PlugInstall -c q -c q \
-    && perl -p -i -e 's/\"colorscheme\ molokai/colorscheme\ molokai/g' $HOME/.vimrc \
-    && cd /home/dev/.vim/plugged/YouCompleteMe \
-    && git submodule update --init --recursive \
-    && python3 ./install.py --clang-completer \
-    && chown -R dev $HOME \
-    && chgrp -R dev $HOME \
-    && chown -R dev /opt/ && chgrp -R dev /opt/
+    && cd $HOME/.vim/plugged/YouCompleteMe \
+    && python ./install.py \
+            --clangd-completer \
+            --go-completer \
+            --ts-completer \
+    && chmod -R o+rwx /opt/vimtx \
+    && rm -rf /opt/conda \
+    && rm -rf /tmp/*
 
 WORKDIR /home/workspace/
-RUN chmod +x /entrypoint.sh
-ENTRYPOINT ["/bin/bash","/entrypoint.sh"]
 CMD ["/bin/bash"]
