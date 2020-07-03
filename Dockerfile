@@ -28,6 +28,7 @@ RUN echo "dev ALL=(root) NOPASSWD:ALL" > /etc/sudoers.d/dev && \
 
 RUN apt-get update \
     && apt-get install -y \
+        wget \
         curl \
         cmake \
         vim \
@@ -41,6 +42,7 @@ RUN apt-get update \
         fontconfig \
         python3 \
         python3-dev \
+        python3-pip \
     && ln -s ${TAR}/vim $HOME/.vim \
     && ln -s ${TAR}/fonts $HOME/.fonts \
     && fc-cache -vf $HOME/.fonts \
@@ -51,7 +53,7 @@ RUN apt-get update \
                 --clangd-completer \
                 --clang-completer \
     && chown -R dev $HOME && chgrp -R dev $HOME \
-    && apt-get remove -y python3 python3-dev \
+    && apt-get remove -y python3 python3-dev python-pip\
     && apt-get -y autoremove \
     && rm -rf /var/lib/apt/lists/* \
     && apt-get clean \
