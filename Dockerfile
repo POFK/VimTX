@@ -58,9 +58,8 @@ RUN apt-get update \
     && apt-get clean \
     && rm -rf /tmp/* \
     && echo ". /etc/profile.d/conda.sh" >> $HOME/.bashrc \
-    && echo "conda activate base" >> $HOME/.bashrc
+    && echo "conda activate base" >> $HOME/.bashrc \
+    && echo "Set disable_coredump false" >> /etc/sudo.conf
 
 WORKDIR /home/workspace/
 USER dev
-ENTRYPOINT ["/bin/bash","tmux"]
-
