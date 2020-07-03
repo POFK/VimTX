@@ -62,7 +62,6 @@ RUN apt-get update \
     && echo ". /etc/profile.d/conda.sh" >> $HOME/.bashrc \
     && echo "conda activate base" >> $HOME/.bashrc
 
-USER dev
 WORKDIR /home/workspace/
 RUN chmod +x /entrypoint.sh
 ENTRYPOINT ["/bin/bash","/entrypoint.sh"]
