@@ -49,11 +49,12 @@ RUN apt-get update \
     && vim -u ${TAR}/vimrc -c PlugInstall -c q -c q \
     && ln -s ${TAR}/my-snippets $HOME/.vim/plugged/ \
     && cd $HOME/.vim/plugged/YouCompleteMe \
+    && pip3 install pep8 yapf flake8 \
     && python3 ./install.py \   
                 --clangd-completer \
                 --clang-completer \
     && chown -R dev $HOME && chgrp -R dev $HOME \
-    && apt-get remove -y python3 python3-dev python-pip\
+    && apt-get remove -y python3 python3-dev python3-pip\
     && apt-get -y autoremove \
     && rm -rf /var/lib/apt/lists/* \
     && apt-get clean \
