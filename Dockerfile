@@ -22,6 +22,8 @@ RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
 RUN groupadd -r $UNAME --gid=1000 && \ 
     useradd -m -s /bin/bash -r -g $UNAME --uid=1000 $UNAME
 
+ENV GOPROXY=https://goproxy.cn
+
 # Grant him sudo privileges
 RUN echo "dev ALL=(root) NOPASSWD:ALL" > /etc/sudoers.d/dev && \
     chmod 0440 /etc/sudoers.d/dev
@@ -40,6 +42,7 @@ RUN apt-get update \
         tmux \
         zathura \
         fontconfig \
+        golang \
         python3 \
         python3-dev \
         python3-pip \
@@ -52,6 +55,7 @@ RUN apt-get update \
     && python3 ./install.py \   
                 --clangd-completer \
                 --clang-completer \
+                --go-completer \
     && chown -R dev $HOME && chgrp -R dev $HOME \
     && apt-get remove -y python3 python3-dev python3-pip\
     && rm -rf /var/lib/apt/lists/* \
