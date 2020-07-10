@@ -31,18 +31,20 @@ set expandtab            " 将制表符扩展为空格
 set tabstop=4            " 设置编辑时制表符占用空格数
 set shiftwidth=4         " 设置格式化时制表符占用空格数
 set softtabstop=4        " 设置4个空格为制表符
-set smarttab             " 在行和段开始处使用制表符
+"set smarttab             " 在行和段开始处使用制表符
 set nowrap               " 禁止折行
-"set tw=80
+set tw=80
 set backspace=2          " 使用回车键正常处理indent,eol,start等
 set sidescroll=10        " 设置向右滚动字符数
-set nofoldenable         " 禁用折叠代码
+"set nofoldenable         " 禁用折叠代码
+"set foldmethod=indent
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " 代码补全
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 set wildmenu             " vim自身命名行模式智能补全
-set completeopt-=preview " 补全时不显示窗口，只显示补全列表
+"set completeopt-=preview " 补全时不显示窗口，只显示补全列表
+set completeopt+=popup 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " 搜索设置
@@ -77,9 +79,10 @@ endif
 
 call plug#begin('~/.vim/plugged')
 
+Plug 'mhinz/vim-startify'
+
 " autocomplete
 Plug 'Valloric/YouCompleteMe'
-Plug 'rdnetto/YCM-Generator', { 'branch': 'stable' }
 Plug 'Shougo/echodoc.vim'
 Plug 'sirver/ultisnips'
 Plug 'honza/vim-snippets'
@@ -88,8 +91,8 @@ Plug 'honza/vim-snippets'
 Plug 'Chiel92/vim-autoformat'
 
 " markdown
-Plug 'iamcco/mathjax-support-for-mkdp'
-Plug 'iamcco/markdown-preview.vim'
+Plug 'suan/vim-instant-markdown', {'for': 'markdown'}
+Plug 'ferrine/md-img-paste.vim'
 
 " latex
 Plug 'lervag/vimtex'
@@ -100,7 +103,7 @@ Plug 'mileszs/ack.vim'
 Plug 'Yggdroot/LeaderF'
 Plug 'godlygeek/tabular'
 Plug 'scrooloose/nerdtree'
-Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
+"Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
 
 " searching
 Plug 'haya14busa/incsearch.vim'
@@ -121,23 +124,19 @@ Plug 'octol/vim-cpp-enhanced-highlight'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'ryanoasis/vim-devicons'
-" Plug 'altercation/vim-colors-solarized'
+Plug 'altercation/vim-colors-solarized'
 Plug 'tomasr/molokai'
 
 " remote
 Plug 'zenbro/mirror.vim'
 
-" other
+" others
+Plug 'skywind3000/asyncrun.vim'
 Plug 'jiangmiao/auto-pairs'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-endwise'
 Plug 'terryma/vim-smooth-scroll'
-Plug 'kana/vim-textobj-user'
-Plug 'kana/vim-textobj-indent'
-Plug 'kana/vim-textobj-syntax'
-Plug 'kana/vim-textobj-function'
-Plug 'sgur/vim-textobj-parameter'
 Plug 'rhysd/clever-f.vim'
 Plug 'ervandew/supertab'
 
@@ -170,18 +169,9 @@ nnoremap <c-w> <c-w>w
 " buffet switch
 nnoremap <S-p> :bp<cr>
 nnoremap <S-n> :bn<cr>
-" nnoremap <S-d> :bd<cr>
 
 " 打开文件自动定位到最后编辑的位置
 autocmd BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | execute "normal! g'\"" | endif
-
-" 主题
-" colorscheme solarized
-" let g:solarized_tercolors=256
-" set background=dark
-"colorscheme molokai
-let g:rehash256 = 1
-
 
 " airline
 let g:airline_theme="molokai"
@@ -218,36 +208,12 @@ nnoremap <leader><leader>m :MirrorPull<cr>
 """""""""""""""""
 " autoformat    "
 """""""""""""""""
-let g:formatterpath = ['$HOME/.local']
+let g:formatterpath = ['$CONDA_PREFIX/bin','/usr/bin','/usr/local/bin']
 let g:autoformat_remove_trailing_spaces = 1
 let g:formatter_yapf_style = 'pep8'
-
 nnoremap <F2> :g/^\s*$/d<CR>
 noremap <F6> :Autoformat<CR>
-
-"""""""""""""""""
-" YCM (checked) "
-"""""""""""""""""
-let g:ycm_confirm_extra_conf = 0
-let g:ycm_error_symbol = '✗'
-let g:ycm_warning_symbol = '>>'
-let g:ycm_seed_identifiers_with_syntax = 1
-let g:ycm_complete_in_comments = 1
-let g:ycm_complete_in_strings = 1
-let g:ycm_python_interpreter_path = '$CONDA_PREFIX/bin/python'
-let g:ycm_python_sys_path = []
-let g:ycm_extra_conf_vim_data = [
-  \  'g:ycm_python_interpreter_path',
-  \  'g:ycm_python_sys_path'
-  \]
-let g:ycm_global_ycm_extra_conf = '$HOME/.ycm_extra_conf.py'
-
-nnoremap <leader>u :YcmCompleter GoToDeclaration<cr>
-nnoremap <leader>i :YcmCompleter GoToDefinition<cr>
-nnoremap <leader>o :YcmCompleter GoToInclude<cr>
-nnoremap <leader>ff :YcmCompleter FixIt<cr>
-nmap <F4> :YcmDiags<cr>
-nmap <silent> <F8> :YcmGenerateConfig<cr>
+"au BufWrite * :Autoformat "autoformat when close
 
 """""""""""""""""
 " supertab      "
@@ -268,9 +234,9 @@ let g:UltiSnipsSnippetsDir = "~/.vim/plugged/my-snippets/UltiSnips"
 
 " ctags
 "set tags+=/local/bin/ctags
-set tags+=/usr/bin/ctags
-set tags+=~/.vim/systags
-set tags+=~/.vim/x86_64-linux-gnu-systags
+"set tags+=/usr/bin/ctags
+"set tags+=~/.vim/systags
+"set tags+=~/.vim/x86_64-linux-gnu-systags
 let g:ycm_collect_identifiers_from_tags_files = 1
 let g:ycm_semantic_triggers =  {
             \   'c' : ['->', '.','re![_a-zA-z0-9]'],
@@ -296,25 +262,6 @@ inoremap <silent> <F9> <esc> :TagbarToggle<cr>
 map /  <Plug>(incsearch-forward)
 map ?  <Plug>(incsearch-backward)
 map g/ <Plug>(incsearch-stay)
-
-" markdown
-let uname = system('uname -s')
-if uname == "Darwin\n"
-    let g:mkdp_path_to_chrome = "/Applications/Google\\ Chrome.app/Contents/MacOS/Google\\ Chrome"
-else
-    let g:mkdp_path_to_chrome = '/usr/bin/google-chrome-stable %U'
-endif
-nmap <silent> <F10> <Plug>MarkdownPreview
-imap <silent> <F10> <Plug>MarkdownPreview
-nmap <silent> <F11> <Plug>StopMarkdownPreview
-imap <silent> <F11> <Plug>StopMarkdownPreview
-
-" latex
-let g:tex_flavor='latex'
-let g:vimtex_view_method='zathura'
-let g:vimtex_quickfix_mode=0
-set conceallevel=1
-let g:tex_conceal='abdmg'
 
 " vim-easymotion
 let g:EasyMotion_smartcase = 1
@@ -364,7 +311,28 @@ nnoremap <leader>g :GV<cr>
 nnoremap <leader>G :GV!<cr>
 nnoremap <leader>gg :GV?<cr>
 
-" 个性化
-if filereadable(expand($HOME . '/.vimrc.local'))
-    source $HOME/.vimrc.local
+
+hi! Normal ctermbg=NONE guibg=NONE
+hi! NonText ctermbg=NONE guibg=NONE
+set relativenumber  " 开启相对行号
+
+if filereadable(expand($VIMDIR . '/.vimrc_ycm'))
+    source $VIMDIR/.vimrc_ycm
 endif
+
+if filereadable(expand($VIMDIR . '/.vimrc_tex'))
+    source $VIMDIR/.vimrc_tex
+endif
+
+if filereadable(expand($VIMDIR . '/.vimrc_md'))
+    source $VIMDIR/.vimrc_md
+endif
+
+if filereadable(expand($VIMDIR . '/.vimrc_asyncrun'))
+    source $VIMDIR/.vimrc_asyncrun
+endif
+
+if filereadable(expand($VIMDIR . '/.vimrc.local'))
+    source $VIMDIR/.vimrc.local
+endif
+

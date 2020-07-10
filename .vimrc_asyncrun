@@ -1,0 +1,22 @@
+let g:asyncrun_open = 10
+map <F5> :call MyCompileRun()<CR>
+func! MyCompileRun()
+    exec "w"
+    if &filetype == 'c'
+        :AsyncRun gcc % -o %< && time ./%<
+    elseif &filetype == 'cpp'
+        exec "!g++ % -o %<"
+        exec "!time ./%<"
+    elseif &filetype == 'java' 
+        exec "!javac %" 
+        exec "!time java %<"
+    elseif &filetype == 'sh'
+        :AsyncRun time bash %
+    elseif &filetype == 'python'
+        :AsyncRun -raw time python %
+    elseif &filetype == 'html'
+        exec "!firefox % &"
+    elseif &filetype == 'go'
+        :AsyncRun go build "%:p:h"
+    endif
+endfunc

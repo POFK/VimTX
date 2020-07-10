@@ -4,7 +4,6 @@ FROM ubuntu:focal
 COPY --from=builder /opt/conda/etc/profile.d/conda.sh /etc/profile.d/conda.sh
 
 ADD . /opt/vimtx
-ADD entrypoint.sh /entrypoint.sh
 
 ENV TAR="/opt/vimtx" \
         UNAME="dev" \
@@ -15,7 +14,8 @@ RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
     && echo "Asia/Shanghai" > /etc/timezone \
     && apt-get update \
     && apt-get install -y sudo git \
-    && apt-get clean
+    && apt-get clean \
+    && pip install compiledb
  
 
 # Add local user 'dev'
@@ -25,6 +25,9 @@ RUN groupadd -r $UNAME --gid=1000 && \
 # Grant him sudo privileges
 RUN echo "dev ALL=(root) NOPASSWD:ALL" > /etc/sudoers.d/dev && \
     chmod 0440 /etc/sudoers.d/dev
+
+ENV GOPROXY=https://goproxy.cn,direct
+ENV GO111MODULE=on
 
 RUN apt-get update \
     && apt-get install -y \
@@ -40,9 +43,19 @@ RUN apt-get update \
         tmux \
         zathura \
         fontconfig \
+        nodejs \
+        npm \
+        golang \
+        latexmk \
+        xdotool \
+        astyle \
         python3 \
         python3-dev \
         python3-pip \
+    && npm install -g js-beautify \
+    && npm install -g remark-cli \
+    && npm install -g instant-markdown-d \
+    && go get -u mvdan.cc/sh/cmd/shfmt \
     && ln -s ${TAR}/vim $HOME/.vim \
     && ln -s ${TAR}/fonts $HOME/.fonts \
     && fc-cache -vf $HOME/.fonts \
@@ -52,6 +65,8 @@ RUN apt-get update \
     && python3 ./install.py \   
                 --clangd-completer \
                 --clang-completer \
+                --go-completer \
+                --ts-completer \
     && chown -R dev $HOME && chgrp -R dev $HOME \
     && apt-get remove -y python3 python3-dev python3-pip\
     && rm -rf /var/lib/apt/lists/* \
@@ -60,6 +75,8 @@ RUN apt-get update \
     && echo ". /etc/profile.d/conda.sh" >> $HOME/.bashrc \
     && echo "conda activate base" >> $HOME/.bashrc \
     && echo "Set disable_coredump false" >> /etc/sudo.conf
+
+ENV VIMDIR=/opt/vimtx
 
 WORKDIR /home/workspace/
 USER dev

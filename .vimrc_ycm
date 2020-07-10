@@ -1,0 +1,36 @@
+let g:ycm_confirm_extra_conf = 0
+
+let g:ycm_error_symbol = '✗'
+let g:ycm_warning_symbol = '>>'
+let g:ycm_seed_identifiers_with_syntax = 1
+let g:ycm_complete_in_comments = 1
+let g:ycm_complete_in_strings = 1
+
+let g:ycm_add_preview_to_completeopt = 1
+let g:ycm_autoclose_preview_window_after_completion = 1
+autocmd CompleteDone * if !pumvisible() | pclose | endif
+set completeopt+=menuone   " show the popup menu even when there is only 1 match
+
+nnoremap <leader>i :YcmCompleter GoTo<cr>
+nnoremap <leader>ff :YcmCompleter FixIt<cr>
+nmap <F4> :YcmDiags<cr>
+
+" C familay
+map <F8> :call CompileRunGcc()<CR>
+func! CompileRunGcc()
+    exec "w"
+    if &filetype == 'c'
+        " if cmake, add -DCMAKE_EXPORT_COMPILE_COMMANDS=ON when configuring
+        exec "!compiledb -n make"
+    endif
+endfunc
+
+" python
+let g:ycm_python_interpreter_path = '$CONDA_PREFIX/bin/python'
+let g:ycm_python_sys_path = []
+let g:ycm_extra_conf_vim_data = [
+  \  'g:ycm_python_interpreter_path',
+  \  'g:ycm_python_sys_path'
+  \]
+let g:ycm_global_ycm_extra_conf = '/opt/vimtx/global_extra_conf.py'
+
