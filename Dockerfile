@@ -63,7 +63,7 @@ RUN apt-get update \
     && vim -u ${TAR}/vimrc -c PlugInstall -c q -c q \
     && ln -s ${TAR}/my-snippets $HOME/.vim/plugged/ \
     && cd $HOME/.vim/plugged/YouCompleteMe \
-    && pip3 install compiledb
+    && pip3 install compiledb \
     && python3 ./install.py \   
                 --clangd-completer \
                 --clang-completer \
