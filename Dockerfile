@@ -22,6 +22,8 @@ RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
 RUN groupadd -r $UNAME --gid=1000 && \ 
     useradd -m -s /bin/bash -r -g $UNAME --uid=1000 $UNAME
 
+ENV GOPROXY=https://goproxy.cn
+
 # Grant him sudo privileges
 RUN echo "dev ALL=(root) NOPASSWD:ALL" > /etc/sudoers.d/dev && \
     chmod 0440 /etc/sudoers.d/dev
