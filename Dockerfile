@@ -15,7 +15,7 @@ RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
     && apt-get update \
     && apt-get install -y sudo git \
     && apt-get clean \
-    && pip install compiledb
+    && pip3 install compiledb
  
 
 # Add local user 'dev'

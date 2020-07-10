@@ -33,7 +33,7 @@ set shiftwidth=4         " 设置格式化时制表符占用空格数
 set softtabstop=4        " 设置4个空格为制表符
 "set smarttab             " 在行和段开始处使用制表符
 set nowrap               " 禁止折行
-set tw=80
+"set tw=80
 set backspace=2          " 使用回车键正常处理indent,eol,start等
 set sidescroll=10        " 设置向右滚动字符数
 "set nofoldenable         " 禁用折叠代码
@@ -43,7 +43,7 @@ set sidescroll=10        " 设置向右滚动字符数
 " 代码补全
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 set wildmenu             " vim自身命名行模式智能补全
-"set completeopt-=preview " 补全时不显示窗口，只显示补全列表
+set completeopt-=preview " 补全时不显示窗口，只显示补全列表
 set completeopt+=popup 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
