@@ -6,11 +6,10 @@ let g:instant_markdown_open_to_the_world = 1
 "let g:instant_markdown_allow_external_content = 0
 let g:instant_markdown_mathjax = 1
 let g:instant_markdown_browser = "docker exec workflow-chrome google-chrome --new-window"
-"let g:instant_markdown_logfile = '/tmp/instant_markdown.log'
+let g:instant_markdown_logfile = '/tmp/instant_markdown.log'
 "let g:instant_markdown_autoscroll = 0
 let g:instant_markdown_port = 18234
-let g:mdip_imgdir = 'img'
-let g:mdip_imgname = 'image.png'
-autocmd FileType markdown nnoremap <silent> <C-p> :call mdip#MarkdownClipboardImage()<CR>F%i
+let g:clipboard_dir = "/home/dev/Pictures/screenshots"
+let g:foo=50
 
 

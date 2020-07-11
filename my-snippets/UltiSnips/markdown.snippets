@@ -1,0 +1,31 @@
+global !p
+def copy_image(snip):
+	import os
+	import glob
+	from shutil import copyfile
+	fp=''.join(snip.v.text.split())
+	src = snip.opt("g:clipboard_dir")
+	if not os.path.exists(fp):
+		list_of_files = glob.glob(os.path.join(src,"*.png")) #snip.opt not work, FIXIT later!
+		latest_file = max(list_of_files, key=os.path.getctime)
+		copyfile(latest_file, fp)
+	return fp
+endglobal
+
+priority -100
+snippet iimage "Insert image" wA
+<div align="center">
+<img src="${1}" alt="Image:`!p snip.rv=t[1]`" style="zoom:${2:100}%;">
+</br>
+${3:Caption}
+</div>
+endsnippet
+
+
+snippet ciimage "Copy and insert image" wA
+<div align="center">
+<img src="`!p snip.rv=copy_image(snip)`" alt="Image:`!p snip.rv=copy_image(snip)`" style="zoom:${2:100}%;">
+</br>
+${3:Caption}
+</div>
+endsnippet
