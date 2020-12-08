@@ -1,0 +1,38 @@
+FROM arm32v7/ubuntu:focal
+
+RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
+    && echo "Asia/Shanghai" > /etc/timezone \
+# change apt source
+    && sed -i 's/archive.ubuntu.com/mirrors.aliyun.com/g' /etc/apt/sources.list \
+    && apt-get update \
+# install dependencies
+    && apt-get install -y \
+        axel \
+        wget \
+        git \
+        make \
+        gcc \
+        g++ \
+        curl \
+        fontconfig \
+        cmake \
+        time \
+        vim \
+        libncurses5-dev \
+        libncursesw5-dev \
+        ctags \
+        sudo \
+        gosu \
+        tmux \
+        texlive \
+        zathura \
+    && rm -rf /var/lib/apt/lists/* \
+    && apt-get clean \
+# install conda
+    && axel -n 4 -q -o /tmp/Miniconda3-latest-Linux-x86_64.sh \
+        https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh \
+    && bash /tmp/Miniconda3-latest-Linux-x86_64.sh -b -p /opt/miniconda \
+    && /opt/miniconda/bin/conda init \
+    && rm -rf /tmp/*
+
+
