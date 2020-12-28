@@ -82,7 +82,7 @@ call plug#begin('~/.vim/plugged')
 Plug 'mhinz/vim-startify'
 
 " autocomplete
-Plug 'Valloric/YouCompleteMe'
+Plug 'ycm-core/YouCompleteMe', {'commit': '29f7acf'}
 Plug 'Shougo/echodoc.vim'
 Plug 'sirver/ultisnips'
 Plug 'honza/vim-snippets'
